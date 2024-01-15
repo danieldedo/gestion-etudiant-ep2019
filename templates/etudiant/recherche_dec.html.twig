@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Etudiant index{% endblock %}
+
+{% block body %}
+   <div class="container mt-5">
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    
+        <fieldset class="border border-black p-2">
+            <legend class="float-none w-auto p-2" style="left: 100px;">Rechercher les candidats d'une option</legend>
+                {{ form_start(form) }}
+                    <div class="container">
+                        <div class="form group row">
+                            <div class="col-sm-2 col-form-label">
+                                {{ form_label(form.opt) }}
+                            </div>
+                            <div class="col-sm-9">
+                                {{ form_widget(form.opt) }}
+                                {{ form_errors(form.opt) }}
+                            </div
+                        </div>
+                        <div class="row m-2"> <!-- Vous pouvez personnaliser la classe CSS selon vos besoins -->
+                            <div class="col-1">Envoyer</div>
+                            <button class="offset-1 col-2 btn btn-primary">{{ button_label|default('OK') }}</button>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+        </fieldset>
+        <br>
+        <h1>Liste des étudiants</h1>
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-decoration-underline">Id etu</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Sexe</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if etu is not null %}
+                {% for etudiant in etu %}
+                    <tr class="text-center">
+                        <td>{{ etudiant.id }}</td>
+                        <td>{{ etudiant.nom }}</td>
+                        <td>{{ etudiant.prenom }}</td>
+                        <td>{{ etudiant.sexe }}</td>
+                        <td>{{ etudiant.codopt.nomopt }}</td>
+                        <td class="d-flex justify-content-around">
+                            <button type="button" class="btn btn-danger supprimer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ etudiant.id }}">Supprimer</button>
+                            <a class="btn btn-secondary" href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}">Editer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+            
+            {% else %} 
+
+                <td colspan="7">Indiquez l'option svp </td>
+
+            {% endif %}
+            
+            </tbody>
+        </table>
+        <a class="btn btn-dark" href="{{ path('app_etudiant_new') }}">Create new</a>
+    </div>
+
+    {{ include('etudiant/_modal_delete.html.twig') }}
+    <script src="{{ asset('js/supprimermodal.js') }}"></script>
+
+{% endblock %}

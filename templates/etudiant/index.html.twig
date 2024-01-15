@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Etudiant index{% endblock %}
+
+{% block body %}
+   <div class="container mt-5">
+        <h1>Etudiant index</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-decoration-underline">Id etu</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Datnais</th>
+                    <th>Ville</th>
+                    <th>Sexe</th>
+                    <th>CodOpt</th>
+                    <th>Diplome du bac</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for etudiant in etudiants %}
+                <tr class="text-center">
+                    <td>{{ etudiant.id }}</td>
+                    <td>{{ etudiant.nom }}</td>
+                    <td>{{ etudiant.prenom }}</td>
+                    <td>{{ etudiant.datnais ? etudiant.datnais|date('d/m/Y') : '--' }}</td>
+                    <td>{{ etudiant.ville }}</td>
+                    <td>{{ etudiant.sexe }}</td>
+                    <td>{{ etudiant.codopt.nomopt }}</td>
+                    {% if etudiant.bac %}
+                        <td><a href="{{ asset('uploads/bac/' ~ etudiant.bac) }}">Voir le document (PDF)</a></td>
+                    {% else %}
+                        <td>not found</td>
+                    {% endif %}
+                    <td class="d-flex justify-content-around">
+                        <button type="button" class="btn btn-danger supprimer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{ etudiant.id }}">Supprimer</button>
+                        <a class="btn btn-secondary" href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}">Editer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-dark" href="{{ path('app_etudiant_new') }}">Create new</a>
+        <a class="btn btn-dark" href="{{ path('app_etudiant_option') }}">Recherche par option</a>
+    </div>
+
+    {{ include('etudiant/_modal_delete.html.twig') }}
+    <script src="{{ asset('js/supprimermodal.js') }}"></script>
+
+{% endblock %}
+
+{# onsubmit="return confirm('Etes vous sûre de supprimer cet étudiant?');" #}

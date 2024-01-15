@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+
+
+<div class="">
+    <h1>MENU</h1>
+
+    <ol>
+        <li><a href="{{path('app_etudiant_new')}}" target="cadre1">Inscription</a></li>
+        <li><a href="{{path('app_etudiant_index')}}" target="cadre1">Liste des étudiants</a></li>
+    </ol>
+{% endblock %}
